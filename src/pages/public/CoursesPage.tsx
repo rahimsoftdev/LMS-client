@@ -1,15 +1,36 @@
+import CourseGrid from '@/components/course/CourseGrid'
+import EmptyState from '@/components/ui/EmptyState'
+import ErrorState from '@/components/ui/ErrorState'
+import LoadingState from '@/components/ui/LoadingState'
 import PageHeading from '@/components/ui/PageHeading'
+import { useCourses } from '@/hooks/useCourses'
 
 export default function CoursesPage() {
+  const { courses, loading, error, reload } = useCourses()
+
   return (
     <section>
       <PageHeading
         title="Courses"
-        description="Debug placeholder for the public course listing page."
+        description="Explore every course published by the admin team."
       />
-      <div className="rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center text-sm text-slate-500">
-        Course cards will be rendered here.
-      </div>
+
+      {loading && <LoadingState />}
+
+      {!loading && error && (
+        <ErrorState message={error} onRetry={() => void reload()} />
+      )}
+
+      {!loading && !error && courses.length === 0 && (
+        <EmptyState
+          title="No courses yet"
+          description="Check back soon — new courses will appear here."
+        />
+      )}
+
+      {!loading && !error && courses.length > 0 && (
+        <CourseGrid courses={courses} />
+      )}
     </section>
   )
 }
