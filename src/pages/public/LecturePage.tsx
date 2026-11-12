@@ -1,5 +1,6 @@
 import { ChevronLeft } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
+import RelatedLectures from '@/components/lecture/RelatedLectures'
 import VideoEmbed from '@/components/lecture/VideoEmbed'
 import EmptyState from '@/components/ui/EmptyState'
 import ErrorState from '@/components/ui/ErrorState'
@@ -17,7 +18,10 @@ function LectureSkeleton() {
           <div className="mt-3 h-4 w-full rounded bg-slate-100" />
           <div className="mt-2 h-4 w-5/6 rounded bg-slate-100" />
         </div>
-        <div className="h-64 rounded-xl bg-slate-100" />
+        <div className="space-y-4">
+          <div className="h-64 rounded-xl bg-slate-100" />
+          <div className="h-48 rounded-xl bg-slate-100" />
+        </div>
       </div>
     </div>
   )
@@ -25,7 +29,7 @@ function LectureSkeleton() {
 
 export default function LecturePage() {
   const { courseId, lectureId } = useParams()
-  const { course, lecture, loading, error, notFound, reload } =
+  const { course, lecture, lectures, loading, error, notFound, reload } =
     useLectureDetails(courseId, lectureId)
 
   if (loading) {
@@ -77,33 +81,41 @@ export default function LecturePage() {
           </p>
         </div>
 
-        <aside className="rounded-xl border border-slate-200 bg-white p-5">
-          <h2 className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-            Course
-          </h2>
-          <Link
-            to={`/courses/${course._id}`}
-            className="mt-2 block text-base font-semibold text-slate-900 hover:text-primary-700"
-          >
-            {course.title}
-          </Link>
-          <p className="mt-2 text-sm leading-relaxed text-slate-500">
-            {course.description}
-          </p>
+        <aside className="space-y-4">
+          <RelatedLectures
+            courseId={course._id}
+            lectures={lectures}
+            activeLectureId={lecture._id}
+          />
 
-          <div className="mt-4 flex items-center justify-between border-t border-slate-200 pt-4">
-            <span className="text-sm font-medium text-slate-500">Price</span>
-            <span className="text-lg font-bold text-primary-700">
-              {formatPrice(course.price)}
-            </span>
+          <div className="rounded-xl border border-slate-200 bg-white p-5">
+            <h2 className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Course
+            </h2>
+            <Link
+              to={`/courses/${course._id}`}
+              className="mt-2 block text-base font-semibold text-slate-900 hover:text-primary-700"
+            >
+              {course.title}
+            </Link>
+            <p className="mt-2 text-sm leading-relaxed text-slate-500">
+              {course.description}
+            </p>
+
+            <div className="mt-4 flex items-center justify-between border-t border-slate-200 pt-4">
+              <span className="text-sm font-medium text-slate-500">Price</span>
+              <span className="text-lg font-bold text-primary-700">
+                {formatPrice(course.price)}
+              </span>
+            </div>
+
+            <Link
+              to={`/courses/${course._id}`}
+              className="mt-4 inline-flex w-full items-center justify-center rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100"
+            >
+              View course
+            </Link>
           </div>
-
-          <Link
-            to={`/courses/${course._id}`}
-            className="mt-4 inline-flex w-full items-center justify-center rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100"
-          >
-            View course
-          </Link>
         </aside>
       </div>
     </section>

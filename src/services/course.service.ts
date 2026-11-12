@@ -1,16 +1,17 @@
-import axios from 'axios'
-import type { Course } from '@/types/course'
+import { api } from '@/lib/api'
+import type { ApiResponse } from '@/types/api'
+import type { Course, CourseWithLectureCount } from '@/types/course'
 
-const COURSES_URL = `${import.meta.env.BASE_URL}course.json`
+export async function getCourses(): Promise<CourseWithLectureCount[]> {
+  const { data } = await api.get<ApiResponse<CourseWithLectureCount[]>>(
+    '/courses',
+  )
 
-export async function getCourses(): Promise<Course[]> {
-  const { data } = await axios.get<Course[]>(COURSES_URL)
-  return data
+  return data.data
 }
 
-export async function getCourseById(
-  courseId: string,
-): Promise<Course | undefined> {
-  const courses = await getCourses()
-  return courses.find((course) => course._id === courseId)
+export async function getCourseById(courseId: string): Promise<Course> {
+  const { data } = await api.get<ApiResponse<Course>>(`/courses/${courseId}`)
+
+  return data.data
 }

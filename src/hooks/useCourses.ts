@@ -1,22 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getCourses } from '@/services/course.service'
-import { getLectures } from '@/services/lecture.service'
 import type { CourseWithLectureCount } from '@/types/course'
 import { getErrorMessage } from '@/utils/errors'
-
-async function fetchCoursesWithCounts(): Promise<CourseWithLectureCount[]> {
-  const [courseList, lectureList] = await Promise.all([
-    getCourses(),
-    getLectures(),
-  ])
-
-  return courseList.map((course) => ({
-    ...course,
-    lectureCount: lectureList.filter(
-      (lecture) => lecture.courseId === course._id,
-    ).length,
-  }))
-}
 
 export function useCourses() {
   const [courses, setCourses] = useState<CourseWithLectureCount[]>([])
@@ -29,7 +14,7 @@ export function useCourses() {
 
     async function load() {
       try {
-        const data = await fetchCoursesWithCounts()
+        const data = await getCourses()
 
         if (!active) return
 

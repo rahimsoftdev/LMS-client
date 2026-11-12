@@ -3,7 +3,7 @@ import { getCourseById } from '@/services/course.service'
 import { getLecturesByCourse } from '@/services/lecture.service'
 import type { Course } from '@/types/course'
 import type { Lecture } from '@/types/lecture'
-import { getErrorMessage } from '@/utils/errors'
+import { getErrorMessage, isNotFoundError } from '@/utils/errors'
 
 export function useCourseDetails(courseId: string | undefined) {
   const [course, setCourse] = useState<Course | null>(null)
@@ -28,20 +28,20 @@ export function useCourseDetails(courseId: string | undefined) {
 
         if (!active) return
 
-        if (!courseData) {
-          setCourse(null)
-          setLectures([])
-          setNotFound(true)
-          setError(null)
-          return
-        }
-
         setCourse(courseData)
         setLectures(lectureList)
         setNotFound(false)
         setError(null)
       } catch (err) {
         if (!active) return
+
+        if (isNotFoundError(err)) {
+          setCourse(null)
+          setLectures([])
+          setNotFound(true)
+          setError(null)
+          return
+        }
 
         setError(getErrorMessage(err, 'Unable to load course details.'))
       } finally {

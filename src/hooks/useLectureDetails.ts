@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
 import { getCourseById } from '@/services/course.service'
-import { getLectureById } from '@/services/lecture.service'
+import {
+  getLectureById,
+  getLecturesByCourse,
+} from '@/services/lecture.service'
 import type { Course } from '@/types/course'
 import type { Lecture } from '@/types/lecture'
-import { getErrorMessage } from '@/utils/errors'
+import { getErrorMessage, isNotFoundError } from '@/utils/errors'
 
 export function useLectureDetails(
   courseId: string | undefined,
@@ -11,6 +14,7 @@ export function useLectureDetails(
 ) {
   const [course, setCourse] = useState<Course | null>(null)
   const [lecture, setLecture] = useState<Lecture | null>(null)
+  const [lectures, setLectures] = useState<Lecture[]>([])
   const [loading, setLoading] = useState(Boolean(courseId && lectureId))
   const [error, setError] = useState<string | null>(null)
   const [notFound, setNotFound] = useState(!(courseId && lectureId))
@@ -25,20 +29,18 @@ export function useLectureDetails(
 
     async function load() {
       try {
-        const [courseData, lectureData] = await Promise.all([
+        const [courseData, lectureData, courseLectures] = await Promise.all([
           getCourseById(currentCourseId),
           getLectureById(currentLectureId),
+          getLecturesByCourse(currentCourseId),
         ])
 
         if (!active) return
 
-        if (
-          !courseData ||
-          !lectureData ||
-          lectureData.courseId !== currentCourseId
-        ) {
+        if (lectureData.courseId !== currentCourseId) {
           setCourse(null)
           setLecture(null)
+          setLectures([])
           setNotFound(true)
           setError(null)
           return
@@ -46,10 +48,20 @@ export function useLectureDetails(
 
         setCourse(courseData)
         setLecture(lectureData)
+        setLectures(courseLectures)
         setNotFound(false)
         setError(null)
       } catch (err) {
         if (!active) return
+
+        if (isNotFoundError(err)) {
+          setCourse(null)
+          setLecture(null)
+          setLectures([])
+          setNotFound(true)
+          setError(null)
+          return
+        }
 
         setError(getErrorMessage(err, 'Unable to load this lecture.'))
       } finally {
@@ -70,5 +82,5 @@ export function useLectureDetails(
     setReloadKey((key) => key + 1)
   }
 
-  return { course, lecture, loading, error, notFound, reload }
+  return { course, lecture, lectures, loading, error, notFound, reload }
 }
