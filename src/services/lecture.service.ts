@@ -7,3 +7,10 @@ export async function getLectures(): Promise<Lecture[]> {
   const { data } = await axios.get<Lecture[]>(LECTURES_URL)
   return data
 }
+
+export async function getLecturesByCourse(
+  courseId: string,
+): Promise<Lecture[]> {
+  const lectures = await getLectures()
+  return lectures.filter((lecture) => lecture.courseId === courseId)
+}
