@@ -4,8 +4,7 @@ import AuthLayout from '@/layouts/AuthLayout'
 import PublicLayout from '@/layouts/PublicLayout'
 
 import CourseCreatePage from '@/pages/admin/CourseCreatePage'
-import CourseEditPage from '@/pages/admin/CourseEditPage'
-import CourseLecturesPage from '@/pages/admin/CourseLecturesPage'
+
 import DashboardPage from '@/pages/admin/DashboardPage'
 import CourseDetailsPage from '@/pages/public/CourseDetailsPage'
 import CoursesPage from '@/pages/public/CoursesPage'
@@ -14,6 +13,8 @@ import LecturePage from '@/pages/public/LecturePage'
 import NotFoundPage from '@/pages/public/NotFoundPage'
 import Login from '@/pages/auth/LoginPage'
 import Register from '@/pages/auth/RegisterPage'
+import AdminCoursesPage from '@/pages/admin/CoursesPage'
+import AdminCourseDetailsPage from '@/pages/admin/AdminCorseDetailsPage'
 
 export const router = createBrowserRouter([
   {
@@ -31,12 +32,12 @@ export const router = createBrowserRouter([
   {
     element: <AuthLayout />,
     children: [
-      
+
       {
-        path:'login', Component:Login
+        path: 'login', Component: Login
       },
       {
-        path:'register', Component:Register
+        path: 'register', Component: Register
       },
     ],
   },
@@ -45,12 +46,16 @@ export const router = createBrowserRouter([
     element: <AdminLayout />,
     children: [
       { index: true, element: <DashboardPage /> },
+
+      // Admin course management
+      { path: 'courses', element: <AdminCoursesPage /> },
       { path: 'courses/new', element: <CourseCreatePage /> },
-      { path: 'courses/:courseId/edit', element: <CourseEditPage /> },
+      { path: 'courses/:courseId', element: <AdminCourseDetailsPage /> },
       {
-        path: 'courses/:courseId/lectures',
-        element: <CourseLecturesPage />,
+        path: 'courses/:courseId/lectures/:lectureId',
+        element: <LecturePage />,
       },
+
     ],
   },
   { path: '*', element: <NotFoundPage /> },

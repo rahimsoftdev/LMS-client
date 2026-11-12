@@ -1,4 +1,10 @@
-import { GraduationCap, LayoutDashboard, PlusCircle } from 'lucide-react'
+
+import {
+  BookOpen,
+  GraduationCap,
+  LayoutDashboard,
+  PlusCircle,
+} from 'lucide-react'
 import { Link, NavLink } from 'react-router-dom'
 
 type AdminSidebarProps = {
@@ -6,12 +12,23 @@ type AdminSidebarProps = {
 }
 
 const adminLinks = [
-  { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
+  {
+    to: '/admin',
+    label: 'Dashboard',
+    icon: LayoutDashboard,
+    end: true,
+  },
+  {
+    to: '/admin/courses',
+    label: 'Courses',
+    icon: BookOpen,
+    end: true,
+  },
   {
     to: '/admin/courses/new',
     label: 'New Course',
     icon: PlusCircle,
-    end: false,
+    end: true,
   },
 ]
 
@@ -20,13 +37,14 @@ export default function AdminSidebar({ onNavigate }: AdminSidebarProps) {
     <div className="flex h-full flex-col">
       <div className="flex h-16 items-center border-b border-slate-200 px-5">
         <Link
-          to="/admin"
+          to="/"
           onClick={onNavigate}
           className="flex items-center gap-2"
         >
           <span className="flex size-9 items-center justify-center rounded-lg bg-primary-600 text-white">
             <GraduationCap className="size-5" aria-hidden="true" />
           </span>
+
           <span className="text-sm font-bold tracking-tight text-slate-900">
             DataPollex <span className="text-primary-600">LMS</span>
           </span>

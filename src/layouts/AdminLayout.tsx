@@ -52,7 +52,7 @@ export default function AdminLayout() {
         )}
 
         <div className="flex min-h-svh min-w-0 flex-1 flex-col">
-          <header className="sticky top-0 z-40 flex h-16 items-center gap-3 border-b border-slate-200 bg-white px-4 md:px-6">
+          {/* <header className="sticky top-0 z-40 flex h-16 items-center gap-3 border-b border-slate-200 bg-white px-4 md:px-6">
             <button
               type="button"
               onClick={() => setSidebarOpen(true)}
@@ -73,7 +73,7 @@ export default function AdminLayout() {
               View Site
               <ExternalLink className="size-4" aria-hidden="true" />
             </Link>
-          </header>
+          </header> */}
 
           <main className="flex-1 p-4 md:p-6 xl:p-8">
             <Outlet />
