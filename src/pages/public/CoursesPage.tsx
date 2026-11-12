@@ -9,7 +9,7 @@ export default function CoursesPage() {
   const { courses, loading, error, reload } = useCourses()
 
   return (
-    <section>
+    <div>
       <PageHeading
         title="Courses"
         description="Explore every course published by the admin team."
@@ -31,6 +31,6 @@ export default function CoursesPage() {
       {!loading && !error && courses.length > 0 && (
         <CourseGrid courses={courses} />
       )}
-    </section>
+    </div>
   )
 }
