@@ -1,10 +1,33 @@
-import { Link, Outlet } from 'react-router-dom'
+
+import { Link, Outlet, Navigate } from 'react-router-dom'
 import { ExternalLink, Menu } from 'lucide-react'
 import { useState } from 'react'
 import AdminSidebar from '@/components/layout/AdminSidebar'
+import { authClient } from '@/lib/auth-client'
 
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  const { data: session, isPending } = authClient.useSession()
+
+  // Session loading হলে অপেক্ষা করবে
+  if (isPending) {
+    return (
+      <div className="flex min-h-svh items-center justify-center">
+        <p className="text-sm text-slate-500">Checking authentication...</p>
+      </div>
+    )
+  }
+
+  // Login না থাকলে login page-এ পাঠাবে
+  if (!session) {
+    return <Navigate to="/login" replace />
+  }
+
+  // Admin না হলে courses page-এ পাঠাবে
+  if (session.user.role !== 'admin') {
+    return <Navigate to="/courses" replace />
+  }
 
   return (
     <div className="min-h-svh bg-slate-100 text-slate-900">
@@ -21,6 +44,7 @@ export default function AdminLayout() {
               onClick={() => setSidebarOpen(false)}
               aria-label="Close sidebar"
             />
+
             <aside className="relative z-10 h-full w-64 border-r border-slate-200 bg-white">
               <AdminSidebar onNavigate={() => setSidebarOpen(false)} />
             </aside>
@@ -37,9 +61,11 @@ export default function AdminLayout() {
             >
               <Menu className="size-5" aria-hidden="true" />
             </button>
+
             <span className="text-sm font-semibold text-slate-700">
               Admin Panel
             </span>
+
             <Link
               to="/"
               className="ml-auto inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-primary-600"

@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router-dom'
 import AdminLayout from '@/layouts/AdminLayout'
 import AuthLayout from '@/layouts/AuthLayout'
 import PublicLayout from '@/layouts/PublicLayout'
-import AdminLoginPage from '@/pages/admin/AdminLoginPage'
+
 import CourseCreatePage from '@/pages/admin/CourseCreatePage'
 import CourseEditPage from '@/pages/admin/CourseEditPage'
 import CourseLecturesPage from '@/pages/admin/CourseLecturesPage'
@@ -12,6 +12,8 @@ import CoursesPage from '@/pages/public/CoursesPage'
 import HomePage from '@/pages/public/HomePage'
 import LecturePage from '@/pages/public/LecturePage'
 import NotFoundPage from '@/pages/public/NotFoundPage'
+import Login from '@/pages/auth/LoginPage'
+import Register from '@/pages/auth/RegisterPage'
 
 export const router = createBrowserRouter([
   {
@@ -28,7 +30,15 @@ export const router = createBrowserRouter([
   },
   {
     element: <AuthLayout />,
-    children: [{ path: 'admin/login', element: <AdminLoginPage /> }],
+    children: [
+      
+      {
+        path:'login', Component:Login
+      },
+      {
+        path:'register', Component:Register
+      },
+    ],
   },
   {
     path: 'admin',
