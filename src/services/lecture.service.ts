@@ -14,3 +14,10 @@ export async function getLecturesByCourse(
   const lectures = await getLectures()
   return lectures.filter((lecture) => lecture.courseId === courseId)
 }
+
+export async function getLectureById(
+  lectureId: string,
+): Promise<Lecture | undefined> {
+  const lectures = await getLectures()
+  return lectures.find((lecture) => lecture._id === lectureId)
+}
