@@ -9,7 +9,7 @@ export default function CoursesPage() {
   const { courses, loading, error, reload } = useCourses()
 
   return (
-    <div>
+    <div className='pt-10 pb-10 xl:pb-section'>
       <PageHeading
         title="Courses"
         description="Explore every course published by the admin team."

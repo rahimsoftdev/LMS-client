@@ -61,7 +61,7 @@ export default function LecturePage() {
   }
 
   return (
-    <section>
+    <section className='py-10 md:py-12 '>
       <Link
         to={`/courses/${course._id}`}
         className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-primary-600"
