@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react'
 import { getCourseById } from '@/services/course.service'
 import { getLecturesByCourse } from '@/services/lecture.service'
@@ -14,12 +15,17 @@ export function useCourseDetails(courseId: string | undefined) {
   const [reloadKey, setReloadKey] = useState(0)
 
   useEffect(() => {
-    const id = courseId
-    if (!id) return
+    if (!courseId) {
+      setCourse(null)
+      setLectures([])
+      setNotFound(true)
+      setLoading(false)
+      return
+    }
 
     let active = true
 
-    async function load() {
+    async function load(id: string) {
       try {
         const [courseData, lectureList] = await Promise.all([
           getCourseById(id),
@@ -49,7 +55,7 @@ export function useCourseDetails(courseId: string | undefined) {
       }
     }
 
-    void load()
+    void load(courseId)
 
     return () => {
       active = false

@@ -1,19 +1,22 @@
-
 import { useState } from 'react'
 import { GraduationCap, Menu, X, LogOut } from 'lucide-react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { authClient } from '../../lib/auth-client'
+import type { User } from '@/types/user.type'
 
 const navLinks = [
   { to: '/', label: 'Home', end: true },
   { to: '/courses', label: 'Courses', end: false },
 ]
 
+type AuthSession = {
+  user: User
+}
+
 const desktopLinkClass = ({ isActive }: { isActive: boolean }) =>
-  `rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-    isActive
-      ? 'bg-primary-50 text-primary-700'
-      : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+  `rounded-lg px-3 py-2 text-sm font-medium transition-colors ${isActive
+    ? 'bg-primary-50 text-primary-700'
+    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
   }`
 
 export default function Navbar() {
@@ -22,10 +25,12 @@ export default function Navbar() {
 
   const navigate = useNavigate()
 
-  const { data: session, isPending } = authClient.useSession()
+  const { data, isPending } = authClient.useSession()
+  console.log(data, 'etai loign data')
 
-  const isLoggedIn = !!session
-  const isAdmin = session?.user.role === 'admin'
+  const session = data as unknown as AuthSession | null
+  const isLoggedIn = Boolean(session)
+  const isAdmin = session?.user?.role === 'admin'
 
   const closeMenu = () => setOpen(false)
 
@@ -33,15 +38,15 @@ export default function Navbar() {
     try {
       setIsLoggingOut(true)
 
-      const { error } = await authClient.signOut()
+      const { error } = await authClient.signOut({})
 
       if (error) {
-        console.error('Logout failed:', error.message)
+        console.error('Logout failed:', error)
         return
       }
 
       closeMenu()
-      navigate('/', { replace: true })
+      navigate('/login', { replace: true })
     } catch (error) {
       console.error('Logout error:', error)
     } finally {
@@ -55,7 +60,6 @@ export default function Navbar() {
         className="container flex h-16 items-center justify-between gap-4"
         aria-label="Main navigation"
       >
-        {/* Logo */}
         <Link to="/" onClick={closeMenu} className="flex items-center gap-2">
           <span className="flex size-9 items-center justify-center rounded-lg bg-primary-600 text-white">
             <GraduationCap className="size-5" aria-hidden="true" />
@@ -66,7 +70,6 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* Desktop Navigation */}
         <div className="hidden items-center gap-1 lg:flex">
           {navLinks.map((link) => (
             <NavLink
@@ -79,19 +82,13 @@ export default function Navbar() {
             </NavLink>
           ))}
 
-          {/* Admin Dashboard */}
           {!isPending && isAdmin && (
-            <NavLink
-              to="/admin"
-              end
-              className={desktopLinkClass}
-            >
+            <NavLink to="/admin" end className={desktopLinkClass}>
               Admin Dashboard
             </NavLink>
           )}
         </div>
 
-        {/* Desktop Auth Buttons */}
         <div className="hidden items-center gap-2 lg:flex">
           {!isPending && (
             <>
@@ -126,7 +123,6 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile Menu Button */}
         <button
           type="button"
           onClick={() => setOpen((value) => !value)}
@@ -143,7 +139,6 @@ export default function Navbar() {
         </button>
       </nav>
 
-      {/* Mobile Navigation */}
       {open && (
         <div
           id="mobile-menu"
@@ -162,7 +157,6 @@ export default function Navbar() {
               </NavLink>
             ))}
 
-            {/* Mobile Admin Dashboard */}
             {!isPending && isAdmin && (
               <NavLink
                 to="/admin"
@@ -174,7 +168,6 @@ export default function Navbar() {
               </NavLink>
             )}
 
-            {/* Mobile Auth Buttons */}
             {!isPending && (
               <div className="mt-3 grid grid-cols-2 gap-2">
                 {isLoggedIn ? (

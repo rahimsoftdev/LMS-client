@@ -11,6 +11,7 @@ import {
   ArrowRight,
 } from 'lucide-react'
 import { authClient } from '../../lib/auth-client'
+import type { User } from '@/types/user.type'
 
 function Login() {
   const navigate = useNavigate()
@@ -45,7 +46,8 @@ function Login() {
       }
 
       // Check user role
-      const role = data.user.role
+      const user = data.user as typeof data.user & Pick<User, 'role'>
+      const role = user?.role
 
       if (role === 'admin') {
         navigate('/admin', { replace: true })

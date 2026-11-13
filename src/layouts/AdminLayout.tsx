@@ -1,31 +1,35 @@
-
-import { Link, Outlet, Navigate } from 'react-router-dom'
-import { ExternalLink, Menu } from 'lucide-react'
+import { Outlet, Navigate } from 'react-router-dom'
 import { useState } from 'react'
 import AdminSidebar from '@/components/layout/AdminSidebar'
 import { authClient } from '@/lib/auth-client'
+import type { User } from '@/types/user.type'
+
+type AuthSession = {
+  user: User
+}
 
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
-  const { data: session, isPending } = authClient.useSession()
+  const { data, isPending } = authClient.useSession()
 
-  // Session loading হলে অপেক্ষা করবে
+  const session = data as unknown as AuthSession | null
+
   if (isPending) {
     return (
       <div className="flex min-h-svh items-center justify-center">
-        <p className="text-sm text-slate-500">Checking authentication...</p>
+        <p className="text-sm text-slate-500">
+          Checking authentication...
+        </p>
       </div>
     )
   }
 
-  // Login না থাকলে login page-এ পাঠাবে
   if (!session) {
     return <Navigate to="/login" replace />
   }
 
-  // Admin না হলে courses page-এ পাঠাবে
-  if (session.user.role !== 'admin') {
+  if (session?.user?.role !== 'admin') {
     return <Navigate to="/courses" replace />
   }
 
@@ -52,29 +56,6 @@ export default function AdminLayout() {
         )}
 
         <div className="flex min-h-svh min-w-0 flex-1 flex-col">
-          {/* <header className="sticky top-0 z-40 flex h-16 items-center gap-3 border-b border-slate-200 bg-white px-4 md:px-6">
-            <button
-              type="button"
-              onClick={() => setSidebarOpen(true)}
-              className="inline-flex size-10 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 lg:hidden"
-              aria-label="Open sidebar"
-            >
-              <Menu className="size-5" aria-hidden="true" />
-            </button>
-
-            <span className="text-sm font-semibold text-slate-700">
-              Admin Panel
-            </span>
-
-            <Link
-              to="/"
-              className="ml-auto inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-primary-600"
-            >
-              View Site
-              <ExternalLink className="size-4" aria-hidden="true" />
-            </Link>
-          </header> */}
-
           <main className="flex-1 p-4 md:p-6 xl:p-8">
             <Outlet />
           </main>

@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen, PlayCircle, ShieldCheck } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import CourseGrid from '@/components/course/CourseGrid'
 import EmptyState from '@/components/ui/EmptyState'
@@ -7,26 +7,32 @@ import LoadingState from '@/components/ui/LoadingState'
 import { useCourses } from '@/hooks/useCourses'
 import Banner from '@/components/public/Banner'
 
-const features = [
-  {
-    icon: BookOpen,
-    title: 'Browse courses',
-    description:
-      'Explore every course published by the admin team, with details and pricing.',
-  },
-  {
-    icon: PlayCircle,
-    title: 'Watch lectures',
-    description:
-      'Open a course, pick a lecture, and stream its embedded video lesson.',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Admin managed',
-    description:
-      'Courses and lectures are created and maintained from the admin dashboard.',
-  },
-]
+// type Feature = {
+//   icon: typeof BookOpen
+//   title: string
+//   description: string
+// }
+
+// const features: Feature[] = [
+//   {
+//     icon: BookOpen,
+//     title: 'Browse courses',
+//     description:
+//       'Explore every course published by the admin team, with details and pricing.',
+//   },
+//   {
+//     icon: PlayCircle,
+//     title: 'Watch lectures',
+//     description:
+//       'Open a course, pick a lecture, and stream its embedded video lesson.',
+//   },
+//   {
+//     icon: ShieldCheck,
+//     title: 'Admin managed',
+//     description:
+//       'Courses and lectures are created and maintained from the admin dashboard.',
+//   },
+// ]
 
 
 export default function HomePage() {
@@ -55,7 +61,7 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <div className="mt-8">
+        <div className="mt-4">
           {loading && <LoadingState />}
 
           {!loading && error && (
@@ -75,24 +81,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mt-section grid gap-4 sm:grid-cols-3">
-        {features.map(({ icon: Icon, title, description }) => (
-          <article
-            key={title}
-            className="rounded-xl border border-slate-200 bg-white p-5"
-          >
-            <span className="flex size-10 items-center justify-center rounded-lg bg-primary-50 text-primary-700">
-              <Icon className="size-5" aria-hidden="true" />
-            </span>
-            <h2 className="mt-4 text-base font-semibold text-slate-900">
-              {title}
-            </h2>
-            <p className="mt-1 text-sm leading-relaxed text-slate-500">
-              {description}
-            </p>
-          </article>
-        ))}
-      </section>
+    
     </div>
   )
 }
