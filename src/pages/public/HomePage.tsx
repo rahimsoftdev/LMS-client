@@ -1,11 +1,9 @@
-import { ArrowRight } from 'lucide-react'
-import { Link } from 'react-router-dom'
-import CourseGrid from '@/components/course/CourseGrid'
-import EmptyState from '@/components/ui/EmptyState'
-import ErrorState from '@/components/ui/ErrorState'
-import LoadingState from '@/components/ui/LoadingState'
-import { useCourses } from '@/hooks/useCourses'
+
+// import { useCourses } from '@/hooks/useCourses'
 import Banner from '@/components/public/Banner'
+import Faq from '@/components/public/Faq'
+import PopulserClass from '@/components/public/PopulserClass'
+import WhyChooseUs from '@/components/public/WhyChooseUs'
 
 // type Feature = {
 //   icon: typeof BookOpen
@@ -36,52 +34,16 @@ import Banner from '@/components/public/Banner'
 
 
 export default function HomePage() {
-  const { courses, loading, error, reload } = useCourses()
+ 
 
   return (
     <div className=''>
       <Banner/>
 
-      <section className=" container py-10 md:py-12 xl:py-section">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
-              Featured courses
-            </h2>
-            <p className="mt-2 text-slate-600">
-              Live courses published by the admin team.
-            </p>
-          </div>
-          <Link
-            to="/courses"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-primary-700 hover:text-primary-800"
-          >
-            View all courses
-            <ArrowRight className="size-4" aria-hidden="true" />
-          </Link>
-        </div>
+     <PopulserClass/>
 
-        <div className="mt-4">
-          {loading && <LoadingState />}
-
-          {!loading && error && (
-            <ErrorState message={error} onRetry={() => void reload()} />
-          )}
-
-          {!loading && !error && courses.length === 0 && (
-            <EmptyState
-              title="No courses yet"
-              description="Check back soon — new courses will appear here."
-            />
-          )}
-
-          {!loading && !error && courses.length > 0 && (
-            <CourseGrid courses={courses.slice(0, 3)} />
-          )}
-        </div>
-      </section>
-
-    
+    <WhyChooseUs/>
+    <Faq/>
     </div>
   )
 }
