@@ -23,7 +23,7 @@ export default function CoursesPage() {
   const [deletingCourse, setDeletingCourse] = useState<Course | null>(null)
 
   return (
-    <section>
+    <section className=''>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <PageHeading
           title="Manage Courses"

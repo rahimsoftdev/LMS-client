@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   Eye,
@@ -13,14 +13,34 @@ import {
 import { authClient } from '../../lib/auth-client'
 import type { User } from '@/types/user.type'
 
+type AuthSession = {
+  user: User
+}
+
 function Login() {
   const navigate = useNavigate()
+
+  // refetch: login-er por session fresh kore ante; data: already logged in check-er jonno
+  const { data: sessionData, refetch } = authClient.useSession()
+
+  const session = sessionData as unknown as AuthSession | null
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+
+  // Session ready hoye gele (login-er por ba already logged in thakle) role onujayi redirect
+  useEffect(() => {
+    const role = session?.user?.role
+
+    if (role === 'admin') {
+      navigate('/admin', { replace: true })
+    } else if (role === 'user') {
+      navigate('/courses', { replace: true })
+    }
+  }, [session, navigate])
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -44,6 +64,10 @@ function Login() {
         setError(error.message || 'Invalid email or password.')
         return
       }
+
+      // Navigate korar age session state fresh kore nao,
+      // jate AdminLayout purono (null) session dekhe /login-e na pathay
+      await refetch()
 
       // Check user role
       const user = data.user as typeof data.user & Pick<User, 'role'>

@@ -39,10 +39,10 @@ export default function HomePage() {
   const { courses, loading, error, reload } = useCourses()
 
   return (
-    <div>
+    <div className=''>
       <Banner/>
 
-      <section className="mt-section">
+      <section className=" container py-10 md:py-12 xl:py-section">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">

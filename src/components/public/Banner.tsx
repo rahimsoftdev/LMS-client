@@ -21,9 +21,10 @@ const features = [
 
 const Banner = () => {
   return (
-    <section className="relative flex max-h-screen w-full items-center overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-primary-50 via-white to-secondary-50 px-5 py-12 sm:px-10 sm:py-14 lg:px-14 lg:py-16">
+    <section className="relative flex max-h-screen w-full items-center overflow-hidden  border border-slate-200 bg-gradient-to-br from-primary-50 via-white to-secondary-50 px-5 py-12 sm:px-10 sm:py-14 lg:px-14 lg:py-16">
       {/* Soft background glow */}
-      <div className="pointer-events-none absolute -left-20 -top-20 h-64 w-64 rounded-full bg-primary-200/50 blur-3xl" />
+      <div className="container">
+        <div className="pointer-events-none absolute -left-20 -top-20 h-64 w-64 rounded-full bg-primary-200/50 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-24 -right-16 h-72 w-72 rounded-full bg-secondary-200/60 blur-3xl" />
 
       <div className="relative grid w-full items-center gap-10 lg:grid-cols-2">
@@ -86,6 +87,7 @@ const Banner = () => {
             ))}
           </div>
         </div>
+      </div>
       </div>
     </section>
   )
